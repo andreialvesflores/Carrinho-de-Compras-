@@ -1,0 +1,13 @@
+// menu.js
+
+const Product = require("./product");
+
+const products = [
+  new Product(1, "Mouse Gamer", 99.90),
+  new Product(2, "Teclado Mecânico", 249.90),
+  new Product(3, "Headset RGB", 199.90),
+  new Product(4, "Monitor 24'", 899.90),
+  new Product(5, "Webcam Full HD", 149.90)
+];
+
+module.exports = products;
