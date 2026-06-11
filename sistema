@@ -1,0 +1,120 @@
+// index.js
+
+const readline = require("readline");
+const Cart = require("./cart");
+const products = require("./menu");
+
+const cart = new Cart();
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
+
+function ask(question) {
+  return new Promise(resolve =>
+    rl.question(question, resolve)
+  );
+}
+
+async function main() {
+  let running = true;
+
+  while (running) {
+    console.log(`
+========================
+🛍️ SHOPEE TERMINAL
+========================
+
+1 - Listar Produtos
+2 - Adicionar Produto
+3 - Remover Produto
+4 - Alterar Quantidade
+5 - Ver Carrinho
+6 - Finalizar Compra
+0 - Sair
+`);
+
+    const option = await ask("Escolha: ");
+
+    switch (option) {
+      case "1":
+        console.table(products);
+        break;
+
+      case "2":
+        const addId = Number(
+          await ask("ID Produto: ")
+        );
+
+        const quantity = Number(
+          await ask("Quantidade: ")
+        );
+
+        const product = products.find(
+          p => p.id === addId
+        );
+
+        if (product) {
+          cart.addProduct(product, quantity);
+          console.log("Produto adicionado!");
+        } else {
+          console.log("Produto não encontrado.");
+        }
+
+        break;
+
+      case "3":
+        const removeId = Number(
+          await ask("ID Produto: ")
+        );
+
+        cart.removeProduct(removeId);
+
+        console.log("Produto removido.");
+        break;
+
+      case "4":
+        const updateId = Number(
+          await ask("ID Produto: ")
+        );
+
+        const newQuantity = Number(
+          await ask("Nova Quantidade: ")
+        );
+
+        cart.updateQuantity(
+          updateId,
+          newQuantity
+        );
+
+        console.log("Quantidade atualizada.");
+        break;
+
+      case "5":
+        cart.displayCart();
+        break;
+
+      case "6":
+        cart.displayCart();
+
+        console.log(
+          "\n✅ Compra finalizada!"
+        );
+
+        running = false;
+        break;
+
+      case "0":
+        running = false;
+        break;
+
+      default:
+        console.log("Opção inválida.");
+    }
+  }
+
+  rl.close();
+}
+
+main();
